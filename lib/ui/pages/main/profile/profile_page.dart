@@ -1,9 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_instagram/model/fake_highlight_model.dart';
+import 'package:my_instagram/ui/pages/main/profile/posts/my_posts.dart';
+import 'package:my_instagram/ui/pages/main/profile/reels/my_reels.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage>
+    with TickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _tabController = TabController(
+      length: 2,
+      vsync: this,
+    );
+    _tabController.animateTo(0);
+    _tabController.addListener(
+      () {
+        setState(() {});
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,37 +120,117 @@ class ProfilePage extends StatelessWidget {
                     height: 80,
                     width: Get.width / 1.1,
                     child: ListView.builder(
-                      itemCount: heightLights.length,
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          margin: const EdgeInsets.only(right: 5, top: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              ClipOval(
-                                child: Image.asset(
-                                  heightLights.elementAt(index).icon!,
-                                  width: 48,
-                                  height: 48,
-                                  fit: BoxFit.cover,
+                        itemCount: heightLights.length,
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            margin: const EdgeInsets.only(right: 5, top: 10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                ClipOval(
+                                  child: Image.asset(
+                                    heightLights.elementAt(index).icon!,
+                                    width: 48,
+                                    height: 48,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                              ),
-                              Text(heightLights.elementAt(index).title!)
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  )
+                                Text(heightLights.elementAt(index).title!)
+                              ],
+                            ),
+                          );
+                        }),
+                  ),
                 ],
               ),
             ],
           ),
+          tabBar(),
+          Expanded(child: tabBarViews())
         ],
       ),
+    );
+  }
+
+  Widget tabBar() {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Container(
+        height: 80,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: AppBar(
+            elevation: 10,
+            backgroundColor: Colors.transparent,
+            bottom: tabBrWidget(context, _tabController),
+          ),
+        ),
+      ),
+    );
+  }
+
+  tabBrWidget(BuildContext context, TabController tabController) {
+    return TabBar(
+      controller: _tabController,
+      tabs: [
+        Tab(
+          child: Container(
+            height: 50,
+            decoration: BoxDecoration(
+              color: tabController.index == 0
+                  ? Colors.blue
+                  : Colors.transparent,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: const Center(
+              child: Text(
+                'Posts',
+                style: TextStyle(
+                  overflow: TextOverflow.ellipsis,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ),
+        ),
+        Tab(
+          child: Container(
+            height: 50,
+            decoration: BoxDecoration(
+              color: tabController.index == 1
+                  ? Colors.blue
+                  : Colors.transparent,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: const Center(
+              child: Text(
+                'Reels',
+                style: TextStyle(
+                  overflow: TextOverflow.ellipsis,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget tabBarViews() {
+    return TabBarView(
+      controller: _tabController,
+      children: [
+        MyPosts(),
+        MyReels(),
+      ],
     );
   }
 }
