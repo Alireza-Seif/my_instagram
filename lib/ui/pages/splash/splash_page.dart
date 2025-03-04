@@ -7,7 +7,7 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future.delayed(const Duration(seconds: 3)).then(
-      (value) => Get.offAllNamed('/dashboard'),
+      (value) => Get.offAllNamed('/login'),
     );
     return const Scaffold();
   }
