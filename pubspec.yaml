@@ -36,6 +36,12 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   get: ^4.7.2
+  retrofit: ^4.4.2
+  logger: ^2.5.0
+  dio: ^5.8.0+1
+  retrofit_generator: ^9.1.5
+  build_runner: ^2.4.13
+  json_serializable: ^6.9.0
 
 dev_dependencies:
   flutter_test:

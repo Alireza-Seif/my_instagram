@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:my_instagram/controller/api_service.dart';
 import 'package:my_instagram/model/fake_highlight_model.dart';
+import 'package:retrofit/dio.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+
     List<FakeHighlightModel> heightLights = [];
+    ApiService apiService = Get.put<ApiService>(ApiService());
+
+    late Future<HttpResponse> getPosts;
+
+    getPosts = apiService.restClient.getPosts();
 
     heightLights.add(FakeHighlightModel('Fall', 'assets/images/fall.jpg'));
     heightLights.add(FakeHighlightModel('Spring', 'assets/images/spring.jpg'));
@@ -24,7 +33,7 @@ class HomePage extends StatelessWidget {
         children: [
           SizedBox(
             height: 80,
-            width: Get.width ,
+            width: Get.width,
             child: ListView.builder(
                 itemCount: heightLights.length,
                 scrollDirection: Axis.horizontal,
@@ -49,6 +58,21 @@ class HomePage extends StatelessWidget {
                     ),
                   );
                 }),
+          ),
+          FutureBuilder<HttpResponse>(
+            future: getPosts,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                  itemBuilder: (context, index) {
+                    return const Text('');
+                  },
+                );
+              } else if (snapshot.hasError) {
+                return const CircularProgressIndicator();
+              }
+              return const Text('Success');
+            },
           )
         ],
       ),
